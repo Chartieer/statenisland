@@ -1,7 +1,11 @@
-import '../styles/globals.css'
+import "../styles/globals.css";
+import React from "react";
+const MyApp = ({ Component, pageProps }) => {
+  return (
+    <React.StrictMode>
+      <Component {...pageProps} />
+    </React.StrictMode>
+  );
+};
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
-}
-
-export default MyApp
+export default MyApp;
