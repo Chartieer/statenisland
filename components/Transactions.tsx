@@ -1,13 +1,13 @@
 import React, { FC } from "react";
 
-const Transactions: FC = () => {
+const Transactions: FC<any> = ({ transactions, ...props }) => {
   const store = [];
 
-  return store.length > 0 ? (
+  return transactions.length > 0 ? (
     <div>
       <h2>Pending transactions</h2>
       <ul className="pending">
-        {store.map((transaction, i) => (
+        {transactions.map((transaction, i) => (
           <li key={i}>{transaction}</li>
         ))}
       </ul>

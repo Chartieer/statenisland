@@ -1,13 +1,11 @@
 import React, { FC } from "react";
 
-const Blocks: FC = () => {
-  const blocks = [];
-
+const Blocks: FC<any> = ({ blockchain, ...props }) => {
   return (
     <div>
       <h2>Blocks</h2>
       <ul className="blocks">
-        {[...blocks].reverse().map((block) => (
+        {[...blockchain].reverse().map((block) => (
           <li key={block.hash}>
             <h3>{block.hash}</h3>
             <pre>{JSON.stringify(block.transactions)}</pre>

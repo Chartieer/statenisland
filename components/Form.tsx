@@ -1,12 +1,17 @@
 import React, { FC, useState } from "react";
 
-const Form: FC = () => {
+interface IForm {
+  onSubmit: (event) => {};
+}
+
+const Form: FC<IForm> = ({ onSubmit, ...props }) => {
   const [message, setMessage] = useState("");
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        // ... implement State solution
+
+        onSubmit(message);
         setMessage("");
       }}
     >
