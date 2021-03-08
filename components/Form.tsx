@@ -1,17 +1,19 @@
-import React, { FC, useState } from "react";
+import React, { FC, useContext, useState } from "react";
+import StateContext from "../src/store";
 
 interface IForm {
   onSubmit: (event) => {};
 }
 
 const Form: FC<IForm> = ({ onSubmit, ...props }) => {
+  const store = useContext(StateContext);
   const [message, setMessage] = useState("");
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
 
-        onSubmit(message);
+        store.updateTransactions(message);
         setMessage("");
       }}
     >

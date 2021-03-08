@@ -6,9 +6,11 @@ import Blocks from "../components/blocks";
 import Transactions from "../components/Transactions";
 import sha256 from "crypto-js/sha256";
 
+import StateContext, { defaultState } from "../src/store";
+
 export default function Home({ children, ...props }) {
-  const [transactions, setTransactions] = useState([]);
-  const [blockchain, setBlockchain] = useState([]);
+  const [_transactions, setTransactions] = useState(["mongo"]);
+  const [_blockchain, setBlockchain] = useState([]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -19,34 +21,48 @@ export default function Home({ children, ...props }) {
       console.log("clear");
       clearInterval(interval);
     };
-  }, [transactions, blockchain]);
-
-  const saveTransactions = (transaction) => {
-    setTransactions([...transactions, transaction]);
-  };
+  }, [_transactions, _blockchain]);
 
   const writeBlocks = () => {
-    if (transactions.length === 0) return;
+    if (_transactions.length === 0) return;
 
-    const prevBlock = transactions[transactions.length - 1] ?? {
+    const prevBlock = _transactions[_transactions.length - 1] ?? {
       hash: "",
     };
 
     const hash = sha256(
-      `${prevBlock.hash}${JSON.stringify(transactions)}`
+      `${prevBlock.hash}${JSON.stringify(_transactions)}`
     ).toString();
 
     setTransactions([]);
 
-    setBlockchain([...blockchain, { hash: hash, transactions: transactions }]);
+    setBlockchain([
+      ..._blockchain,
+      { hash: hash, transactions: _transactions },
+    ]);
+  };
+
+  const state = {
+    transactions: _transactions,
+    blockchain: _blockchain,
+    get numBlocks() {
+      return _blockchain.length;
+    },
+
+    updateTransactions(transaction) {
+      console.log("update");
+      setTransactions([..._transactions, transaction]);
+    },
   };
 
   return (
-    <main className="">
-      <Title blocks={blockchain.length} />
-      <Form onSubmit={saveTransactions} />
-      <Transactions transactions={transactions} />
-      <Blocks blockchain={blockchain} />
-    </main>
+    <StateContext.Provider value={state}>
+      <main className="">
+        <Title />
+        <Form />
+        <Transactions />
+        <Blocks />
+      </main>
+    </StateContext.Provider>
   );
 }
